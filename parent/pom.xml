@@ -11,6 +11,8 @@
     <properties>
         <beanstalker.version>1.4.5-SNAPSHOT</beanstalker.version>
         <lambada.version>0.0.2-SNAPSHOT</lambada.version>
+        <jackson.version>2.7.3</jackson.version>
+
         <maven.deploy.skip>true</maven.deploy.skip>
         <maven.install.skip>true</maven.install.skip>
 
@@ -21,9 +23,19 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>io.ingenieux.lambada</groupId>
-                <artifactId>lambada-core</artifactId>
-                <version>${lambada.version}</version>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -50,11 +62,6 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.4</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.spullara.mustache.java</groupId>
-                <artifactId>compiler</artifactId>
-                <version>0.9.1</version>
             </dependency>
             <dependency>
                 <groupId>org.junit</groupId>
