@@ -10,12 +10,12 @@
 
     <properties>
         <beanstalker.version>1.4.5-SNAPSHOT</beanstalker.version>
+        <lambada.version>0.0.2-SNAPSHOT</lambada.version>
         <maven.deploy.skip>true</maven.deploy.skip>
         <maven.install.skip>true</maven.install.skip>
 
         <beanstalk.s3Key>apps/${project.artifactId}/${project.artifactId}-${beanstalk.versionLabel}.zip</beanstalk.s3Key>
         <beanstalk.artifactFile>${project.basedir}/target/${project.artifactId}.jar</beanstalk.artifactFile>
-        <lambada.version>0.0.2-SNAPSHOT</lambada.version>
     </properties>
 
     <dependencyManagement>
@@ -78,7 +78,7 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.2</version>
+                    <version>3.3</version>
                     <configuration>
                         <source>1.8</source>
                         <target>1.8</target>
@@ -88,6 +88,40 @@
                     <groupId>io.ingenieux.lambada</groupId>
                     <artifactId>lambada-maven-plugin</artifactId>
                     <version>${lambada.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>br.com.ingenieux</groupId>
+                    <artifactId>lambda-maven-plugin</artifactId>
+                    <version>${beanstalker.version}</version>
+                    <configuration>
+                        <s3Url>s3://${beanstalk.s3Bucket}/${beanstalk.s3Key}</s3Url>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>br.com.ingenieux</groupId>
+                    <artifactId>apigateway-maven-plugin</artifactId>
+                    <version>${beanstalker.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>br.com.ingenieux</groupId>
+                    <artifactId>beanstalk-maven-plugin</artifactId>
+                    <version>${beanstalker.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>br.com.ingenieux</groupId>
+                    <artifactId>cloudformation-maven-plugin</artifactId>
+                    <version>${beanstalker.version}</version>
+                    <configuration>
+                        <outputMapping>
+                            <IAMRole>lambda.default.role</IAMRole>
+                            <SecurityGroupId>lambda.deploy.securityGroupIds</SecurityGroupId>
+                            <SubnetId>lambda.deploy.subnetIds</SubnetId>
+                        </outputMapping>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>2.4.3</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -113,12 +147,31 @@
     <profiles>
         <profile>
             <id>deploy</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+                <maven.install.skip>true</maven.install.skip>
+                <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+                <maven.deploy.skip>true</maven.deploy.skip>
+                <beanstalk.versionLabel>${maven.build.timestamp}</beanstalk.versionLabel>
+            </properties>
             <build>
                 <defaultGoal>deploy</defaultGoal>
                 <plugins>
                     <plugin>
+                        <groupId>br.com.ingenieux</groupId>
+                        <artifactId>cloudformation-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>init</id>
+                                <goals>
+                                    <goal>load-stack-outputs</goal>
+                                </goals>
+                                <phase>initialize</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <artifactId>maven-shade-plugin</artifactId>
-                        <version>2.3</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>
@@ -144,7 +197,6 @@
                     <plugin>
                         <groupId>br.com.ingenieux</groupId>
                         <artifactId>beanstalk-maven-plugin</artifactId>
-                        <version>1.4.5-SNAPSHOT</version>
                         <executions>
                             <execution>
                                 <id>deploy</id>
@@ -161,7 +213,6 @@
                     <plugin>
                         <groupId>br.com.ingenieux</groupId>
                         <artifactId>lambda-maven-plugin</artifactId>
-                        <version>${beanstalker.version}</version>
                         <executions>
                             <execution>
                                 <id>deploy</id>
@@ -171,19 +222,9 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <configuration>
-                            <s3Url>s3://${beanstalk.s3Bucket}/${beanstalk.s3Key}</s3Url>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
-            <properties>
-                <maven.test.skip>true</maven.test.skip>
-                <maven.install.skip>true</maven.install.skip>
-                <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-                <maven.deploy.skip>true</maven.deploy.skip>
-                <beanstalk.versionLabel>${maven.build.timestamp}</beanstalk.versionLabel>
-            </properties>
         </profile>
     </profiles>
 </project>
