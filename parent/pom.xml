@@ -9,8 +9,8 @@
     <packaging>pom</packaging>
 
     <properties>
-        <beanstalker.version>1.4.5-SNAPSHOT</beanstalker.version>
-        <lambada.version>0.0.2-SNAPSHOT</lambada.version>
+        <beanstalker.version>1.5.1-SNAPSHOT</beanstalker.version>
+        <lambada.version>0.0.3-SNAPSHOT</lambada.version>
         <jackson.version>2.7.3</jackson.version>
 
         <maven.deploy.skip>true</maven.deploy.skip>
