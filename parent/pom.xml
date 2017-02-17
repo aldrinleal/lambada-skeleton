@@ -40,7 +40,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.11</version>
+                <version>4.12</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -62,12 +62,6 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.4</version>
-            </dependency>
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
-                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -234,4 +228,46 @@
             </build>
         </profile>
     </profiles>
+
+    <repositories>
+        <repository>
+            <id>sonatype-oss</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>modafocas-snapshot</id>
+            <name>modafocas-snapshot</name>
+            <url>https://repo.modafocas.org/nexus/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>sonatype-oss</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>modafocas-snapshot</id>
+            <name>modafocas-snapshot</name>
+            <url>https://repo.modafocas.org/nexus/content/repositories/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
